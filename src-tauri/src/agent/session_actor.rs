@@ -2205,6 +2205,14 @@ impl SessionActor {
                         e
                     );
                 }
+                // Also reset the in-mem error tracking. The parser sets result_subtype
+                // only on error results and never clears it on success (see claude_protocol
+                // test "success doesn't set got_result_event"). Without this, a stale error
+                // subtype from an earlier turn survives into a later successful turn and
+                // gets re-persisted at that turn's idle (had_result_error), making
+                // finalize_meta on EOF wrongly mark a 0-exit run as Failed. Mirrors the
+                // meta clear above and the interrupt path's reset.
+                self.protocol.result_subtype = None;
             }
 
             // Persist result error details on failed
