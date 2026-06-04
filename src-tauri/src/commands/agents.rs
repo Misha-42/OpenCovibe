@@ -846,7 +846,16 @@ fn collect_codex_role_files(
     };
     for entry in entries.flatten() {
         let path = entry.path();
-        if path.is_dir() {
+        // Use the entry's file type (does NOT follow symlinks) so a symlinked-dir cycle under
+        // ~/.codex/agents/ can't drive unbounded recursion. Recurse only into real directories.
+        let ft = match entry.file_type() {
+            Ok(t) => t,
+            Err(_) => continue,
+        };
+        if ft.is_symlink() {
+            continue;
+        }
+        if ft.is_dir() {
             collect_codex_role_files(&path, out, seen);
             continue;
         }

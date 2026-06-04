@@ -276,13 +276,13 @@ export function detectBatchGroups(
   let i = 0;
   while (i < timeline.length) {
     const entry = timeline[i];
-    if (entry.kind === "tool" && entry.tool?.tool_name === "Task") {
+    if (entry.kind === "tool" && isSubagentTool(entry.tool?.tool_name ?? "")) {
       const start = i;
       const tools: BusToolItem[] = [];
       while (
         i < timeline.length &&
         timeline[i].kind === "tool" &&
-        timeline[i].tool?.tool_name === "Task"
+        isSubagentTool(timeline[i].tool?.tool_name ?? "")
       ) {
         tools.push(timeline[i].tool!);
         i++;

@@ -310,6 +310,17 @@ describe("detectBatchGroups", () => {
   it("empty timeline", () => {
     expect(detectBatchGroups([]).size).toBe(0);
   });
+
+  it("detects renamed Agent subagent tools (Task→Agent drift)", () => {
+    const agent = (id: string) => ({
+      kind: "tool" as const,
+      tool: { tool_use_id: id, tool_name: "Agent", input: {}, status: "running" } as any,
+    });
+    const tl = [agent("1"), agent("2"), agent("3")];
+    const groups = detectBatchGroups(tl);
+    expect(groups.size).toBe(1);
+    expect(groups.get(0)!.length).toBe(3);
+  });
 });
 
 // ── planFileSuffix ──
