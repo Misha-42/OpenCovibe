@@ -36,7 +36,6 @@
   } from "$lib/types";
   import { PLATFORM_PRESETS, findCredential } from "$lib/utils/platform-presets";
   import { isKnownAgent, getAgentFeatures } from "$lib/utils/agent-features";
-  import { IS_WEBKIT } from "$lib/utils/platform";
   import {
     detectBatchGroups,
     detectToolBursts,
