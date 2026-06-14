@@ -26,6 +26,11 @@ function setupDocument() {
   } as unknown as Document;
 }
 
+// Stub navigator.languages so initLocale() picks "en" regardless of host OS locale
+function stubNavigator() {
+  vi.stubGlobal("navigator", { languages: ["en"] });
+}
+
 function setupLocalStorage() {
   const store: Record<string, string> = {};
   const lsImpl = {
@@ -50,6 +55,7 @@ describe("i18n", () => {
 
   beforeEach(() => {
     setupDocument();
+    stubNavigator();
     lsStore = setupLocalStorage();
     // Reset to base locale by switching explicitly
     switchLocale("en");
@@ -177,7 +183,7 @@ describe("i18n", () => {
   // ── Static exports ──
 
   it("exports correct locales array", () => {
-    expect(locales).toEqual(["en", "zh-CN"]);
+    expect(locales).toEqual(["en", "zh-CN", "ru"]);
   });
 
   it("exports correct baseLocale", () => {
@@ -187,6 +193,7 @@ describe("i18n", () => {
   it("isLocale returns true for valid locales", () => {
     expect(isLocale("en")).toBe(true);
     expect(isLocale("zh-CN")).toBe(true);
+    expect(isLocale("ru")).toBe(true);
   });
 
   it("isLocale returns false for invalid locales", () => {

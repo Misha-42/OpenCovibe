@@ -24,6 +24,13 @@ export const LOCALE_REGISTRY = [
     dir: "ltr",
     status: "stable",
   },
+  {
+    code: "ru",
+    nativeName: "\u0420\u0443\u0441\u0441\u043A\u0438\u0439",
+    shortLabel: "RU",
+    dir: "ltr",
+    status: "beta",
+  },
 ] as const satisfies readonly LocaleEntry[];
 
 export type Locale = (typeof LOCALE_REGISTRY)[number]["code"];

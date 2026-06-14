@@ -6,6 +6,7 @@
  */
 import en from "$messages/en.json";
 import zhCN from "$messages/zh-CN.json";
+import ru from "$messages/ru.json";
 import { LOCALE_REGISTRY, SUPPORTED_LOCALES, BASE_LOCALE, isLocale, getEntry } from "./registry";
 import type { Locale } from "./registry";
 import type { MessageKey, MessageParams } from "./types";
@@ -29,6 +30,7 @@ const LEGACY_STORAGE_KEY = "PARAGLIDE_LOCALE";
 const messageCache: Record<string, Record<string, string>> = {
   en: en as Record<string, string>,
   "zh-CN": zhCN as Record<string, string>,
+  ru: ru as Record<string, string>,
 };
 
 // Explicit loader map — one line per locale, deterministic bundling.
@@ -36,6 +38,7 @@ const messageCache: Record<string, Record<string, string>> = {
 // To add a language: add a loader here + registry.ts entry + messages/<code>.json
 const loaders: Record<string, () => Promise<{ default: Record<string, string> }>> = {
   "zh-CN": () => import("$messages/zh-CN.json"),
+  ru: () => import("$messages/ru.json"),
 };
 
 async function loadMessages(code: string): Promise<Record<string, string>> {
